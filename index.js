@@ -34,7 +34,6 @@ io.on('connection', function(socket) {
         console.log('disconnected');
         socket.broadcast.emit('user left', socket.id)
     });
-    
 
 });
 

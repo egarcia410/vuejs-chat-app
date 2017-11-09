@@ -42,7 +42,7 @@ new Vue({
         send: function() {
             this.message.type = 'chat';
             this.message.user = socket.id;
-            this.message.timestamp = 'Today';
+            this.message.timestamp = moment().calendar();
             socket.emit('chat.message', this.message);
             this.message.type = '';
             this.message.user = '';
@@ -50,13 +50,24 @@ new Vue({
             this.message.timestamp = '';
         },
         userIsTyping: function (username) {
-
+            if (this.areTyping.indexOf(username) >= 0) {
+                return true;
+            }
+            return false;
         },
         usersAreTyping: function () {
-
+            if (this.areTyping.indexOf(socket.id) <= -1) {
+                this.areTyping.push(socket.id);
+                socket.emit('user typing', socket.id);
+            }
         },
-        stoppedTyping: function () {
-
+        stoppedTyping: function (keycode) {
+            if (keycode === '13') {
+                let index = this.areTyping.indexOf(socket.id);
+                if (index >= 0) {
+                    this.areTyping.splice(index, 1);
+                }
+            }
         }
     }
 })

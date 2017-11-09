@@ -15,7 +15,9 @@
                 <span class="glyphicon glyphicon-user"></span> Online ({{ connectedUsers.length }})
             </div>
             <ul>
-                <li v-for="user in connectedUsers">{{user}}</li>
+                <li v-for="user in connectedUsers">
+                    {{user}} <span v-if="userIsTyping(user)" class="glyphicon glyphicon-pencil">..</span>
+                </li>
             </ul>
         </div>
         <div class="col-md-10">
@@ -44,7 +46,7 @@
                     </div>
                     <div class="panel-footer">
                         <form @submit.prevent="send">
-                            <input v-model="message.text" type="text" class="form-control input-lg" placeholder="Type message here">
+                            <input v-model="message.text" v-on:keyup="usersAreTyping" v-on:keyup.13="stoppedTyping('13')" type="text" class="form-control input-lg" placeholder="Type message here">
                         </form>
                     </div>
                 </div>
@@ -55,6 +57,7 @@
 <script src="/socket-io/socket.io.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.1/moment.min.js"></script>
 <script src="/static/js/main.js"></script>
 </body>
 </html>
